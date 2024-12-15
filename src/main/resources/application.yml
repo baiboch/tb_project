@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: ct
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+server:
+  port: 8080
+  servlet:
+    context-path: /tb
+
+logging:
+  file:
+    name: application.log
