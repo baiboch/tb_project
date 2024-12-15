@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  app:
+    image: tb_project:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tb_project_container
+    ports:
+      - "9091:9091"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+    restart: always
