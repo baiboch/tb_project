@@ -1,23 +1,30 @@
 package com.tb.ct.service;
 
-import org.springframework.stereotype.Service;
+import static com.tb.ct.util.Constant.LOG_DIR;
+import static com.tb.ct.util.Constant.TOTAL_RECORDS;
 
+import org.springframework.stereotype.Service;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.time.LocalDate;
+import java.nio.file.Path;
 import java.util.List;
 
 @Service
-public class LogFileService {
+public class FileService {
 
-  private static final String LOG_DIR = "logs/";
-  private static final String LOG_FILENAME = "%s_%s_%s.log";
-  private static final String TOTAL_RECORDS_MASK = "TotalRecords: %s";
+  public void saveBatchToFile(List<String> batch, String fileName) throws IOException {
+    Path outputPath = Path.of(fileName);
+    try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(outputPath.toFile(), true))) {
+      for (String line : batch) {
+        writer.write(line + "\n");
+      }
+    }
+  }
 
-  public void createLogDirIfNotExist() {
-    File logDir = new File(LOG_DIR);
+  public void createLogDirIfNotExist(String dir) throws IllegalStateException {
+    File logDir = new File(dir == null ? LOG_DIR : LOG_DIR + dir + "/");
     if (!logDir.exists()) {
       try {
         if (!logDir.mkdirs()) {
@@ -29,21 +36,19 @@ public class LogFileService {
     }
   }
 
-  public File createLogFile(String type) {
-    String fileName = String.format(LOG_FILENAME, LOG_DIR, type, LocalDate.now());
+  public File getLogFile(String dir, String fileName) {
+    createLogDirIfNotExist(dir);
     return new File(fileName);
   }
 
-  public void writeToFile(File file, String jsonString) throws IOException {
+  public void writeToLogFile(File file, String jsonString) throws IOException {
     boolean isNew = !file.exists();
     try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(file, true))) {
       if (isNew) {
         String totalTitle = getTotalRecordsTitle(0);
-        writer.write(totalTitle);
-        writer.newLine();
+        writer.write(totalTitle + "\n");
       }
-      writer.write(jsonString);
-      writer.newLine();
+      writer.write(jsonString + "\n");
     } catch (IOException e) {
       throw new IllegalStateException(
               "Could not write to file: " + file.getAbsolutePath(), e);
@@ -51,7 +56,7 @@ public class LogFileService {
     updateRecordCount(file);
   }
 
-  public void updateRecordCount(File file) throws IllegalStateException {
+  private void updateRecordCount(File file) throws IllegalStateException {
     try {
       List<String> lines = Files.readAllLines(file.toPath());
       int recordsCount = lines.size() - 1;
@@ -64,7 +69,7 @@ public class LogFileService {
     }
   }
 
-  public String getTotalRecordsTitle(int count) {
-    return String.format(TOTAL_RECORDS_MASK, count);
+  private String getTotalRecordsTitle(int count) {
+    return String.format(TOTAL_RECORDS, count);
   }
 }
