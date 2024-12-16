@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: ct
+  datasource:
+    url: jdbc:h2:file:./test_database/logs_db;DB_CLOSE_ON_EXIT=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+  sql:
+    init:
+      mode: always
+
+server:
+  port: 9091
+  servlet:
+    context-path: /tb
+
+token:
+  signing:
+    key: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+
+logging:
+  file:
+    name: application.log
+  level:
+    root: info
