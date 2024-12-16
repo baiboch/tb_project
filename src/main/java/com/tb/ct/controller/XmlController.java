@@ -20,14 +20,11 @@ public class XmlController {
     this.xmlProcessingService = xmlProcessingService;
   }
 
-  @PostMapping(
-          consumes = "application/xml",
-          produces = "application/json;charset=UTF-8"
-  )
+  @PostMapping(consumes = "application/xml", produces = "text/plain")
   public ResponseEntity<String> processXml(@RequestBody String xmlData) {
     try {
-      xmlProcessingService.process(xmlData);
-      return ResponseEntity.ok("Success!");
+      String logFileName = xmlProcessingService.processXmlRequest(xmlData);
+      return ResponseEntity.ok("Processed: " + logFileName);
     } catch (XmlProcessException e) {
       return ResponseEntity.status(INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
     }
