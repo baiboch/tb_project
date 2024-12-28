@@ -30,7 +30,7 @@ public class AuthenticationService {
     var user = new User();
     user.setUsername(request.getUsername());
     user.setPassword(passwordEncoder.encode(request.getPassword()));
-    user.setBalance(new BigDecimal("8.10"));
+    user.setBalance(new BigDecimal("8.00"));
 
     userService.create(user);
 
