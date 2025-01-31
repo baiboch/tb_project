@@ -1,7 +1,9 @@
 package com.tb.ct.persistency;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -9,14 +11,12 @@ import java.util.Objects;
 @Data
 @Entity
 @Table(name = "payments")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Payment {
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-  @Column(nullable = false, unique = true)
-  private String paymentId;
+  private String id;
 
   @Column(nullable = false, precision = 19, scale = 4)
   private BigDecimal amount;

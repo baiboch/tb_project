@@ -48,6 +48,6 @@ public class PaymentService {
     userService.save(currentUser);
     paymentRepository.save(payment);
 
-    return new PaymentResponse(payment.getPaymentId(), SUCCESS, "Payment processed successfully.");
+    return new PaymentResponse(payment.getId(), SUCCESS, "Payment processed successfully.");
   }
 }
