@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/user")
 public class AuthController {
 
   private final AuthenticationService authenticationService;
@@ -20,7 +20,7 @@ public class AuthController {
     this.authenticationService = authenticationService;
   }
 
-  @PostMapping(value = "/adduser", produces = "application/json")
+  @PostMapping(produces = "application/json")
   public ResponseEntity<JwtAuthenticationResponse> addUser(@RequestBody @Valid AddUserRequest request) {
     return ResponseEntity.ok(authenticationService.addNewUser(request));
   }
